@@ -1,28 +1,41 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from 'react-router-dom';
+import { addBlog, updateBlog } from './store/actions/blogActions';
+import { connect } from 'react-redux';
+
+import Header from './components/layouts/Header';
+import Blogs from './components/blogs/Blogs';
+import About from './components/pages/About';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <React.Fragment>
+        <Header />
+        <Switch>
+          <Route exact path="/" component={Blogs}/>
+          <Route exact path="/about" component={About} />
+        </Switch>
+      </React.Fragment>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    blogs: state.blogReducer
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    add: blog => {
+      dispatch(addBlog(blog))
+    },
+    update: blog => {
+      dispatch(updateBlog(blog))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
