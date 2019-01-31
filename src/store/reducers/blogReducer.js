@@ -33,20 +33,46 @@ const initialState = {
           updated_at: ''
         }
     ],
-    blog: {}
+    categoryOptions: [
+      'Food', 'Travel', 'Photography', 'Education', 'Business', 'Politics'
+    ],
+    blog: null,
+    process: {
+      loading: false,
+      success: false
+    }
 }
 
 const blogReducer = (state = initialState, action) => {
+  const d = new Date();
+  const date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
   switch(action.type) {
+      case "DEFAULT": 
+        return {
+          ...state,
+          process: {
+            success: !state.process.success
+          }
+        }
+      case "LOADING":
+        return {
+          ...state,
+          process: {
+            loading: !state.process.loading
+          }
+        }
       case "ADD_BLOG_ASYNC":
         return {
             ...state,
-            blogs: [action.payload, ...state]
+            blogs: [{id:v4(), ...action.payload, created_at: date}, ...state.blogs],
+            process: {
+              success: !state.process.success
+            }
         }
       case "SHOW_BLOG_ASYNC":
         return {
             ...state,
-            blog: state.blogs.map(blog => blog.id === action.payload && blog)
+            blog: state.blogs.filter(blog => blog.id === action.payload && blog)
         }
       case "UPDATE_BLOG_ASYNC":
         return {

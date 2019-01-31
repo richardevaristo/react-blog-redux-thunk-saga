@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { addBlog, updateBlog } from './store/actions/blogActions';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { addBlog, updateBlog, deleteBlog, editBlogAsync } from './store/actions/blogActions';
 import { connect } from 'react-redux';
 
 import Header from './components/layouts/Header';
 import Blogs from './components/blogs/Blogs';
 import About from './components/pages/About';
+import 'bulma/css/bulma.min.css'
+import './App.css'
+import CreateBlog from './components/blogs/CreateBlog';
+import EditBlog from './components/blogs/EditBlog';
 
 class App extends Component {
   render() {
@@ -13,8 +17,19 @@ class App extends Component {
       <React.Fragment>
         <Header />
         <Switch>
-          <Route exact path="/" component={Blogs}/>
+          <Route exact path="/">
+            <Blogs 
+              blogs={this.props.blogs} 
+              process={this.props.process} 
+              delete={this.props.delete}
+              edit={this.props.edit}
+            />
+          </Route>
           <Route exact path="/about" component={About} />
+          <Route exact path="/blog/create">
+            <CreateBlog add={this.props.add} options={this.props.blogs.categoryOptions} process={this.props.process}/>
+          </Route>
+          <Route exact path="/blog/edit/:id" component={EditBlog}/>
         </Switch>
       </React.Fragment>
     );
@@ -23,7 +38,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    blogs: state.blogReducer
+    blogs: state.blogReducer,
+    selectedBlog: state.blogReducer.blog,
+    process: state.blogReducer.process
   }
 }
 
@@ -34,8 +51,14 @@ const mapDispatchToProps = dispatch => {
     },
     update: blog => {
       dispatch(updateBlog(blog))
+    },
+    delete: blog => {
+      dispatch(deleteBlog(blog))
+    },
+    edit: blog => {
+      dispatch(editBlogAsync(blog))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
