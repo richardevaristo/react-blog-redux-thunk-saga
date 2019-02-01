@@ -31,13 +31,13 @@ class BlogItem extends Component {
                 {
                     this.state.isContentActive && 
                     <BlogContent 
-                        id = {id}
-                        content  = {content}
-                        author   = {author}
-                        date     = {created_at}
-                        category = {category}
+                        id          = {id}
+                        content     = {content}
+                        author      = {author}
+                        date        = {created_at}
+                        category    = {category}
                         deleteEvent = {this.props.delete}
-                        editEvent = {this.props.edit}
+                        process     = {this.props.process}
                     />
                 }
             </div>

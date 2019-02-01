@@ -1,3 +1,12 @@
+import Axios from "axios";
+import { v4 } from 'uuid';
+
+function currentDate() {
+    const d = new Date();
+    const date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+    return date;
+}
+
 export const addBlogAsync = (blog) => {
     return {
         type: "ADD_BLOG_ASYNC",
@@ -6,11 +15,18 @@ export const addBlogAsync = (blog) => {
 }
 
 export const addBlog = blog => {
+    blog = {
+        id: v4(),
+        ...blog,
+        created_at: currentDate()
+    };
     return dispatch => {
         dispatch(loading())
         setTimeout(() => {
-            dispatch(addBlogAsync(blog));
-            dispatch(DEFAULT())
+            Axios.post('http://localhost:3000/blogs', blog)
+            .then(res => dispatch(addBlogAsync(res.data)))
+            .then(res => dispatch(DEFAULT()))
+            .catch(err => console.log(err))
         }, 5000);
     }
 }
@@ -24,8 +40,12 @@ export const updateBlogAsync = (blog) => {
 
 export const updateBlog = blog => {
     return dispatch => {
+        dispatch(loading())
         setTimeout(() => {
-            dispatch(updateBlogAsync(blog))
+            Axios.put(`http://localhost:3000/blogs/${blog.id}`, blog)
+            .then(res => dispatch(updateBlogAsync(res.data)))
+            .then(res => dispatch(DEFAULT()))
+            .catch(err => console.log(err))
         }, 5000)
     }
 }
@@ -39,24 +59,26 @@ export const deleteBlogAsync = blog => {
 
 export const deleteBlog = blog => {
     return dispatch => {
+        dispatch(loading())
         setTimeout(() => {
-            dispatch(deleteBlogAsync(blog))
+            Axios.delete(`http://localhost:3000/blogs/${blog}`)
+            .then(res => dispatch(deleteBlogAsync(blog)))
+            .then(res => dispatch(DEFAULT()))
+            .catch(err => console.log(err))
         }, 5000);
     }
 }
 
-export const editBlogAsync = blog => {
+export const getBlogsAsync = (blogs) => {
     return {
-        type: "SHOW_BLOG_ASYNC",
-        payload: blog
+        type: "GET_DATA_FULFILLED",
+        payload: blogs
     }
 }
 
-export const editBlog = blog => {
+export const getBlogs = () => {
     return dispatch => {
-        setTimeout(() => {
-            dispatch(editBlogAsync(blog))
-        }, 5000);
+        Axios.get('http://localhost:3000/blogs').then(res => dispatch(getBlogsAsync(res.data)))
     }
 }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { addBlog, updateBlog, deleteBlog, editBlogAsync } from './store/actions/blogActions';
+import { addBlog, deleteBlog } from './store/actions/blogActions';
 import { connect } from 'react-redux';
 
 import Header from './components/layouts/Header';
@@ -22,7 +22,6 @@ class App extends Component {
               blogs={this.props.blogs} 
               process={this.props.process} 
               delete={this.props.delete}
-              edit={this.props.edit}
             />
           </Route>
           <Route exact path="/about" component={About} />
@@ -49,14 +48,8 @@ const mapDispatchToProps = dispatch => {
     add: blog => {
       dispatch(addBlog(blog))
     },
-    update: blog => {
-      dispatch(updateBlog(blog))
-    },
     delete: blog => {
       dispatch(deleteBlog(blog))
-    },
-    edit: blog => {
-      dispatch(editBlogAsync(blog))
     }
   }
 }

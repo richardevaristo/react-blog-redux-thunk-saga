@@ -20,10 +20,10 @@ class Blogs extends Component {
             {
               blogs.map(blog =>
                 <BlogItem 
-                  key  = {blog.id}
-                  blog = {blog}
-                  delete = {this.props.delete}
-                  edit = {this.props.edit}
+                  key     = {blog.id}
+                  blog    = {blog}
+                  delete  = {this.props.delete}
+                  process = {this.props.process}
                 />
               )
             }

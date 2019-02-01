@@ -5,6 +5,7 @@ const Select = ({
   label,
   changeEvent,
   options,
+  defaultValue
 }) => {
   return (
     <React.Fragment>
@@ -16,10 +17,14 @@ const Select = ({
             <div className="field">
               <div className="select is-fullwidth">
                 <select onChange={changeEvent} name={name}>
-                  <option>Select Category...</option>
+                  <option>{defaultValue}</option>
                   {
                     options.map((option, index) => 
-                      <option key={index} value={option}>{option}</option>  
+                      option !== defaultValue &&
+                        (
+                          <option key={index} value={option}>{option}</option>
+                        )
+                       
                     )
                   }
                 </select>

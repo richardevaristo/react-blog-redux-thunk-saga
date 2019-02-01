@@ -3,6 +3,7 @@ import TextInput from '../layouts/TextInput'
 import TextArea from '../layouts/TextArea'
 import Select from '../layouts/Select'
 import { Redirect } from 'react-router-dom'
+import classnames from 'classnames'
 class CreateBlog extends Component {
     
     submitForm = (e) => {
@@ -53,11 +54,8 @@ class CreateBlog extends Component {
                         />
                         <div className="buttons is-pulled-right">
                             <button type="button" className="button">Cancel</button>
-                            <button type="submit" className="button is-primary">
-                                {
-                                    this.props.process.loading ? 'Processing...' :
-                                    'Save'
-                                }
+                            <button type="submit" className={classnames('button is-primary', {'is-loading': this.props.process.loading})}>
+                                Save
                             </button>
                         </div>
                         </form>

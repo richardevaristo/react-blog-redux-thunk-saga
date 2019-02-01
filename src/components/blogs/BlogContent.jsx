@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-
+import classnames from 'classnames'
 const MONTHS =  [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
 ];
@@ -17,7 +17,7 @@ const BlogContent = ({
     date, 
     category,
     deleteEvent,
-    editEvent
+    process
 }) => {
     return (
         <React.Fragment>
@@ -48,7 +48,7 @@ const BlogContent = ({
                 </button>
             </div>
             <div className="card-footer-item">
-                <button className="button is-info" onClick={()=>editEvent(id)}>
+                <button className="button is-info">
                     <Link to={`/blog/edit/${id}`} className="has-text-white">
                     <p className="control">
                         <i className="fa fa-pencil"></i>
@@ -56,7 +56,7 @@ const BlogContent = ({
                     </p>
                     </Link>
                 </button>
-                <button className="button is-danger" onClick={()=>deleteEvent(id)}>
+                <button className={classnames('button is-danger', {'is-loading':process.loading})} onClick={()=>deleteEvent(id)}>
                     <p className="control">
                         <i className="fa fa-times"></i>
                         {' '} Delete

@@ -2,24 +2,27 @@ import React, { Component } from 'react'
 import TextInput from '../layouts/TextInput'
 import TextArea from '../layouts/TextArea'
 import Select from '../layouts/Select'
-import { connect } from 'react-redux';
-
+import { connect } from 'react-redux'
+import { updateBlog } from '../../store/actions/blogActions'
+import classnames from 'classnames'
+import { Redirect } from 'react-router-dom'
 class EditBlog extends Component {
 
     state = {
-        title: this.props.blog ? this.props.blog.title : '',
-        author: this.props.blog ? this.props.blog.author : '',
-        category: this.props.blog ? this.props.blog.category : '',
-        content: this.props.blog ? this.props.blog.content : '',
+        title   : this.props.blog ? this.props.blog.title   : '',
+        author  : this.props.blog ? this.props.blog.author  : '',
+        category: this.props.blog ? this.props.blog.category: '',
+        content : this.props.blog ? this.props.blog.content : '',
     }
 
     componentDidMount() {
-        if(this.props.match.params.id) {
-
-        }
+        (this.props.match.params) &&
+            this.setState(this.props.blog)
     }
+
     submitForm = (e) => {
         e.preventDefault();
+        this.props.update(this.state);
     }
 
     onChangeEventHandler = (e) => {
@@ -45,53 +48,67 @@ class EditBlog extends Component {
                             name        = "title"
                             changeEvent = {this.onChangeEventHandler}
                             placeholder = 'Enter Title...'
-                            value = {title}
+                            value       = {title}
                         />
                         <TextInput 
                             label       = "Author"
                             name        = "author"
                             changeEvent = {this.onChangeEventHandler}
                             placeholder = 'Enter Author...'
-                            value={author}
+                            value       = {author}
                         />
                         <Select 
-                            label       = "Category"
-                            name        = "category"
-                            changeEvent = {this.onChangeEventHandler}
-                            options     = {this.props.options}
-                            value = {category}
+                            label        = "Category"
+                            name         = "category"
+                            changeEvent  = {this.onChangeEventHandler}
+                            options      = {this.props.options}
+                            defaultValue = {category}
                         />
                         <TextArea 
                             label       = "Content"
                             name        = "content"
                             changeEvent = {this.onChangeEventHandler}
                             placeholder = "Enter your blog content here..."
-                            value = {content}
+                            value       = {content}
                         />
                         <div className="buttons is-pulled-right">
                             <button type="button" className="button">Cancel</button>
-                            <button type="submit" className="button is-primary">
+                            <button type="submit" className={classnames('button is-primary', {
+                                'is-loading': this.props.process.loading
+                            })}>
                                 Update
                             </button>
                         </div>
                         </form>
                     </div>
                 </div>
+                {
+                    this.props.process.success && <Redirect to='/' />
+                }
             </div>
             </React.Fragment>
         )
     }
 }
-// export default EditBlog
+
 const mapStateToProps = (state, props) => {
     const { match } = props;
     if(match.params.id){
         return {
             blog: state.blogReducer.blogs.find(blog => blog.id === match.params.id),
-            options: state.blogReducer.categoryOptions
+            options: state.blogReducer.categoryOptions,
+            process: state.blogReducer.process
         }
     }
     return {blog: null}
 }
 
-export default connect(mapStateToProps)(EditBlog)
+const mapDispatchToProps = dispatch => {
+    return {
+        update: blog => {
+            dispatch(updateBlog(blog))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditBlog)
