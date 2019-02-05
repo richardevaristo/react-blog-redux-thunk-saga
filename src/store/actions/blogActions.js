@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const BASE_URI = 'http://localhost:8080';
+const BASE_URI = 'http://10.0.16.84:8080';
 function currentDate() {
     const d = new Date();
     const date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
