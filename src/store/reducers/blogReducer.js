@@ -1,5 +1,6 @@
 const initialState = {
     blogs: [],
+    blog:{},
     categoryOptions: [
       'Food', 'Travel', 'Photography', 'Education', 'Business', 'Politics'
     ],
@@ -11,17 +12,22 @@ const initialState = {
 
 const blogReducer = (state = initialState, action) => {
   switch(action.type) {
-      case "DEFAULT":
+      case "DATA_DEFAULT":
         return {
           ...state,
           process: {
             success: !state.process.success
           }
         }
-      case "GET_DATA_FULFILLED": 
+      case "GET_DATA_FULFILLED":
         return {
           ...state,
           blogs: action.payload
+        }
+      case "SHOW_BLOG_ASYNC": 
+        return {
+          ...state,
+          blog: action.payload
         }
       case "LOADING":
         return {
@@ -30,7 +36,7 @@ const blogReducer = (state = initialState, action) => {
             loading: !state.process.loading
           }
         }
-      case "ADD_BLOG_ASYNC":
+      case "ADD_BLOG":
         return {
             ...state,
             blogs: [{...action.payload}, ...state.blogs],
@@ -39,11 +45,7 @@ const blogReducer = (state = initialState, action) => {
               success: !state.process.success
             }
         }
-      case "SHOW_BLOG_ASYNC":
-        return {
-            ...state
-        }
-      case "UPDATE_BLOG_ASYNC":
+      case "UPDATE_BLOG":
         return {
             ...state,
             blogs: state.blogs.map(blog => blog.id === action.payload.id ? action.payload : blog),
@@ -52,7 +54,7 @@ const blogReducer = (state = initialState, action) => {
               success: !state.process.success
             }
         }
-      case "DELETE_BLOG_ASYNC":
+      case "DELETE_BLOG":
         return {
             ...state,
             blogs: state.blogs.filter(blog => blog.id !== action.payload),

@@ -11,14 +11,9 @@ class CreateBlog extends Component {
         this.props.add(this.state);
     }
 
-    onChangeEventHandler = (e) => {
-        if(e.target.name === 'title'){
-            const textToSlug = e.target.value.trim();
-            this.setState({slug: textToSlug.toLowerCase().replace(/\s/g, '-')});
-        }
-
+    onChangeEventHandler = (e) => 
         this.setState({[e.target.name]: e.target.value});
-    }
+    
 
     render() {
         return (

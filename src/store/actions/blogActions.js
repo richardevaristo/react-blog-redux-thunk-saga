@@ -1,6 +1,6 @@
 import Axios from "axios";
-import { v4 } from 'uuid';
 
+const BASE_URI = 'http://localhost:8080';
 function currentDate() {
     const d = new Date();
     const date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
@@ -9,64 +9,51 @@ function currentDate() {
 
 export const addBlogAsync = (blog) => {
     return {
-        type: "ADD_BLOG_ASYNC",
+        type: "ADD_BLOG",
         payload: blog
     }
 }
 
-export const addBlog = blog => {
+export const addBlog = blog => dispatch => {
     blog = {
-        id: v4(),
         ...blog,
         created_at: currentDate()
     };
-    return dispatch => {
-        dispatch(loading())
-        setTimeout(() => {
-            Axios.post('http://localhost:3000/blogs', blog)
-            .then(res => dispatch(addBlogAsync(res.data)))
-            .then(res => dispatch(DEFAULT()))
-            .catch(err => console.log(err))
-        }, 5000);
-    }
+    dispatch(loading())
+    Axios.post(`${BASE_URI}/blogs`, blog)
+    .then(res => dispatch(addBlogAsync(res.data)))
+    .then(() => dispatch(DEFAULTDATA()))
+    .catch(err => console.log(err))
 }
 
 export const updateBlogAsync = (blog) => {
     return {
-        type: "UPDATE_BLOG_ASYNC",
+        type: "UPDATE_BLOG",
         payload: blog
     }
 }
 
-export const updateBlog = blog => {
-    return dispatch => {
-        dispatch(loading())
-        setTimeout(() => {
-            Axios.put(`http://localhost:3000/blogs/${blog.id}`, blog)
-            .then(res => dispatch(updateBlogAsync(res.data)))
-            .then(res => dispatch(DEFAULT()))
-            .catch(err => console.log(err))
-        }, 5000)
-    }
+export const updateBlog = blog => dispatch => {
+    dispatch(loading())
+    Axios.put(`${BASE_URI}/blogs/${blog.id}`, blog)
+    .then(res => dispatch(updateBlogAsync(res.data)))
+    .then(() => dispatch(DEFAULTDATA()))
+    .catch(err => console.log(err))
 }
 
 export const deleteBlogAsync = blog => {
     return {
-        type: "DELETE_BLOG_ASYNC",
+        type: "DELETE_BLOG",
         payload: blog
     }
 }
 
-export const deleteBlog = blog => {
-    return dispatch => {
-        dispatch(loading())
-        setTimeout(() => {
-            Axios.delete(`http://localhost:3000/blogs/${blog}`)
-            .then(res => dispatch(deleteBlogAsync(blog)))
-            .then(res => dispatch(DEFAULT()))
-            .catch(err => console.log(err))
-        }, 5000);
-    }
+export const deleteBlog = blog => dispatch =>{
+    dispatch(loading())
+    Axios.delete(`${BASE_URI}/blogs/${blog}`)
+    .then(res => dispatch(deleteBlogAsync(blog)))
+    .then(res => dispatch(DEFAULTDATA()))
+    .catch(err => console.log(err))
 }
 
 export const getBlogsAsync = (blogs) => {
@@ -75,11 +62,19 @@ export const getBlogsAsync = (blogs) => {
         payload: blogs
     }
 }
-
-export const getBlogs = () => {
-    return dispatch => {
-        Axios.get('http://localhost:3000/blogs').then(res => dispatch(getBlogsAsync(res.data)))
+export const getBlogAsync = blog => {
+    return {
+        type: "SHOW_BLOG",
+        payload: blog
     }
+}
+export const getBlog = id => dispatch =>{
+    Axios.get(`${BASE_URI}/blogs/${id}`)
+    .then(res => dispatch(getBlogAsync(res.data)));
+}
+
+export const getBlogs = () => dispatch => {
+    Axios.get(`${BASE_URI}/blogs`).then(res => dispatch(getBlogsAsync(res.data)))
 }
 
 export const loading = () => {
@@ -88,8 +83,8 @@ export const loading = () => {
     }
 }
 
-export const DEFAULT = () => {
+export const DEFAULTDATA = () => {
     return {
-        type: "DEFAULT"
+        type: "DATA_DEFAULT"
     }
 }
