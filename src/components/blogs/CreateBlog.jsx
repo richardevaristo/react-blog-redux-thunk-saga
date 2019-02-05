@@ -4,17 +4,21 @@ import TextArea from '../layouts/TextArea'
 import Select from '../layouts/Select'
 import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
+import { connect } from 'react-redux'
+import { addBlog } from '../../store/actions/blogActions'
 class CreateBlog extends Component {
     
     submitForm = (e) => {
         e.preventDefault();
+        
         this.props.add(this.state);
     }
 
     onChangeEventHandler = (e) => 
         this.setState({[e.target.name]: e.target.value});
     
-
+    cancel = (e) => this.props.history.push("/");
+    
     render() {
         return (
             <React.Fragment>
@@ -48,7 +52,7 @@ class CreateBlog extends Component {
                             placeholder = "Enter your blog content here..."
                         />
                         <div className="buttons is-pulled-right">
-                            <button type="button" className="button">Cancel</button>
+                            <button type="button" className="button" onClick={this.cancel}>Cancel</button>
                             <button type="submit" className={classnames('button is-primary', {'is-loading': this.props.process.loading})}>
                                 Save
                             </button>
@@ -64,4 +68,20 @@ class CreateBlog extends Component {
         )
     }
 }
-export default CreateBlog
+const mapStateToProps = state => {
+    return {
+        blog: state.blogReducer.blog,
+        options: state.blogReducer.categoryOptions,
+        process: state.blogReducer.process
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        add: blog => {
+            dispatch(addBlog(blog))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBlog)

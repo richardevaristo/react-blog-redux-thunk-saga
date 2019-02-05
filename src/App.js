@@ -25,10 +25,8 @@ class App extends Component {
             />
           </Route>
           <Route exact path="/about" component={About} />
-          <Route exact path="/blog/create">
-            <CreateBlog add={this.props.add} options={this.props.blogs.categoryOptions} process={this.props.process}/>
-          </Route>
-          <Route exact path="/blog/edit/:id" component={EditBlog}/>
+          <Route exact path="/blog/create" component={CreateBlog} />
+          <Route exact path="/blog/edit/:id" component={EditBlog} />
         </Switch>
       </React.Fragment>
     );

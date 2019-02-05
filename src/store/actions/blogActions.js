@@ -52,7 +52,7 @@ export const deleteBlog = blog => dispatch =>{
     dispatch(loading())
     Axios.delete(`${BASE_URI}/blogs/${blog}`)
     .then(res => dispatch(deleteBlogAsync(blog)))
-    .then(res => dispatch(DEFAULTDATA()))
+    .then(() => dispatch(DEFAULTDATA()))
     .catch(err => console.log(err))
 }
 

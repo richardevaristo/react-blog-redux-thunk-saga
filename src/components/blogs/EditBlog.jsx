@@ -17,14 +17,7 @@ class EditBlog extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState){
-        const { id, title, author, category, content} = nextProps.blog;
-        this.setState({
-            id,
-            title,
-            author,
-            category,
-            content
-        });
+        this.setState(nextProps.blog);
     }
 
     componentDidMount() {
@@ -40,6 +33,7 @@ class EditBlog extends Component {
     onChangeEventHandler = (e) => 
         this.setState({[e.target.name]: e.target.value});
 
+    cancel = (e) => this.props.history.push("/");
     render() {
         const { title, author, category, content } = this.state
         return (
@@ -78,7 +72,7 @@ class EditBlog extends Component {
                             value       = {content || ''}
                         />
                         <div className="buttons is-pulled-right">
-                            <button type="button" className="button">Cancel</button>
+                            <button type="button" className="button" onClick={this.cancel}>Cancel</button>
                             <button type="submit" className={classnames('button is-primary', {
                                 'is-loading': this.props.process.loading
                             })}>
