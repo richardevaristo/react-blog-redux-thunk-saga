@@ -2,28 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { createLogger } from 'redux-logger';
-import { BrowserRouter as Router } from 'react-router-dom';
-import blogReducer from './store/reducers/blogReducer';
-import thunk from 'redux-thunk';
-import { getBlogs } from './store/actions/blogActions';
-import createSagaMiddleware from 'redux-saga';
-import { watchGetBlog } from './sagas/saga';
+import { HashRouter as Router } from 'react-router-dom';
+import store from './config/store'
+import sagaMiddleware from './app/middleware/sagaMiddleware';
+import { watchGetBlogs, watchGetBlog, watchDeleteBlog, watchUpdateBlog, watchAddBlog } from './sagas/saga';
 
-const sagaMiddleware = createSagaMiddleware();
-
-const store = createStore(combineReducers(
-    {
-        blogReducer
-    }
-    ),{}, applyMiddleware(createLogger(), thunk, sagaMiddleware));
-sagaMiddleware.run(watchGetBlog)
-store.dispatch(getBlogs())
-store.subscribe( ()  => {
-    console.log('Store Updated!', store.getState())
-} )
-
+sagaMiddleware.run(watchGetBlogs);
+sagaMiddleware.run(watchGetBlog);
+sagaMiddleware.run(watchDeleteBlog);
+sagaMiddleware.run(watchUpdateBlog);
+sagaMiddleware.run(watchAddBlog);
 ReactDOM.render(
 <Provider store={store}>
     <Router>

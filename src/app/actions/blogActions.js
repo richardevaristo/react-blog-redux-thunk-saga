@@ -1,6 +1,10 @@
 import Axios from "axios";
+import { GET_BLOGS, ADD_BLOG, SHOW_BLOG, UPDATE_BLOG, DELETE_BLOG, DATA_DEFAULT, LOADING } from './types'
 
+// backend server address
 const BASE_URI = 'http://10.0.16.84:8080';
+
+// get current date
 function currentDate() {
     const d = new Date();
     const date = `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
@@ -9,7 +13,7 @@ function currentDate() {
 
 export const addBlogAsync = (blog) => {
     return {
-        type: "ADD_BLOG",
+        type: ADD_BLOG,
         payload: blog
     }
 }
@@ -28,7 +32,7 @@ export const addBlog = blog => dispatch => {
 
 export const updateBlogAsync = (blog) => {
     return {
-        type: "UPDATE_BLOG",
+        type: UPDATE_BLOG,
         payload: blog
     }
 }
@@ -43,7 +47,7 @@ export const updateBlog = blog => dispatch => {
 
 export const deleteBlogAsync = blog => {
     return {
-        type: "DELETE_BLOG",
+        type: DELETE_BLOG,
         payload: blog
     }
 }
@@ -58,13 +62,13 @@ export const deleteBlog = blog => dispatch =>{
 
 export const getBlogsAsync = (blogs) => {
     return {
-        type: "GET_DATA_FULFILLED",
+        type: GET_BLOGS,
         payload: blogs
     }
 }
 export const getBlogAsync = blog => {
     return {
-        type: "SHOW_BLOG",
+        type: SHOW_BLOG,
         payload: blog
     }
 }
@@ -74,17 +78,18 @@ export const getBlog = id => dispatch =>{
 }
 
 export const getBlogs = () => dispatch => {
-    Axios.get(`${BASE_URI}/blogs`).then(res => dispatch(getBlogsAsync(res.data)))
+    Axios.get(`${BASE_URI}/blogs`)
+    .then(res => dispatch(getBlogsAsync(res.data)))
 }
 
 export const loading = () => {
     return {
-        type: "LOADING"
+        type: LOADING
     }
 }
 
 export const DEFAULTDATA = () => {
     return {
-        type: "DATA_DEFAULT"
+        type: DATA_DEFAULT
     }
 }
