@@ -3,18 +3,17 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
-import store from './config/store'
+import store, { persistor } from './config/store'
 import sagaMiddleware from './app/middleware/sagaMiddleware';
-import { watchGetBlogs, watchGetBlog, watchDeleteBlog, watchUpdateBlog, watchAddBlog } from './sagas/saga';
+import watchActions from './sagas/saga';
+import { PersistGate } from 'redux-persist/integration/react'
+sagaMiddleware.run(watchActions);
 
-sagaMiddleware.run(watchGetBlogs);
-sagaMiddleware.run(watchGetBlog);
-sagaMiddleware.run(watchDeleteBlog);
-sagaMiddleware.run(watchUpdateBlog);
-sagaMiddleware.run(watchAddBlog);
 ReactDOM.render(
 <Provider store={store}>
-    <Router>
-        <App />
-    </Router>
+    <PersistGate loading={null} persistor={persistor}>
+        <Router>
+            <App />
+        </Router>
+    </PersistGate>
 </Provider>, document.getElementById('root'));

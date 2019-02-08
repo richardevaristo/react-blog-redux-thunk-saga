@@ -3,7 +3,7 @@ import TextInput from '../layouts/TextInput'
 import TextArea from '../layouts/TextArea'
 import Select from '../layouts/Select'
 import { connect } from 'react-redux'
-import { updateBlog, getBlog } from '../../store/actions/blogActions'
+import { updateBlog, getBlog } from '../../app/actions/blogActions'
 import classnames from 'classnames'
 import { Redirect } from 'react-router-dom'
 class EditBlog extends Component {

@@ -5,7 +5,8 @@ import Select from '../layouts/Select'
 import { Redirect } from 'react-router-dom'
 import classnames from 'classnames'
 import { connect } from 'react-redux'
-import { addBlog } from '../../store/actions/blogActions'
+import { addBlog } from '../../app/actions/blogActions';
+
 class CreateBlog extends Component {
     
     submitForm = (e) => {
